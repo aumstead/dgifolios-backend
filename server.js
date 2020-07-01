@@ -11,6 +11,7 @@ const usersRoutes = require('./routes/usersRoutes')
 const profileRoutes = require('./routes/profileRoutes')
 const followersRoutes = require('./routes/followersRoutes')
 const forgotPassRoutes = require('./routes/forgotPassRoutes')
+const exploreRoutes = require('./routes/exploreRoutes')
 
 const app = express();
 
@@ -18,8 +19,6 @@ const app = express();
 mongoose.connect(process.env.DATABASE, {useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false, useUnifiedTopology: true}).then(() => console.log('DB connected'))
 
 app.use(bodyParser.json());
-
-console.log('hitting server')
 
 // code to deal with CORS error
 app.use((req, res, next) => {
@@ -45,6 +44,7 @@ app.use(forgotPassRoutes)
 app.use(usersRoutes)
 app.use(profileRoutes)
 app.use(followersRoutes)
+app.use(exploreRoutes)
 
 
 // Serve static assets in production

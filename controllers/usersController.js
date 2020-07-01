@@ -25,7 +25,6 @@ exports.editProfileInfo = async (req, res) => {
     strategy,
     goals,
   } = req.body;
-  console.log(age, preference3, strategy, goals);
 
   if (!("authorization" in req.headers)) {
     return res.status(401).send("Authorization required");
@@ -52,7 +51,6 @@ exports.editProfileInfo = async (req, res) => {
       },
       { new: true }
     );
-    console.log(user);
     res.status(200).send("Changes made!");
   } catch (error) {
     console.error(error);

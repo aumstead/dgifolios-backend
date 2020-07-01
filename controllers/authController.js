@@ -50,7 +50,6 @@ exports.signup = async (req, res) => {
       return res.status(422).send(`Email address already associated with an account.`)
     }
     const usernameUser = await User.findOne({ username })
-    console.log('username user', user)
     if (usernameUser) {
       return res.status(422).send(`Username taken. Please choose another.`)
     }

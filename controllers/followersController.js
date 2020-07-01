@@ -15,7 +15,6 @@ exports.addFollower = async (req, res) => {
       { $push: { followers: { $each: [newFollower], $position: 0 } }},
       { new: true }
     );
-    console.log(mongoRes);
     res.status(200).send("Follower added to user's profile.");
   } catch (error) {
     console.error(error);

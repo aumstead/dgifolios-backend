@@ -6,13 +6,11 @@ exports.getDividends = async (req, res) => {
     return res.status(401).send("Authorization required");
   }
   try {
-    console.log("in dividends get try block");
     const { userId } = jwt.verify(
       req.headers.authorization,
       process.env.JWT_SECRET
     );
     const dividendHistory = await DividendHistory.findOne({ user: userId });
-    console.log('got res from mongo, preparing api res')
     res.status(200).json(dividendHistory.divPayments);
   } catch (error) {
     console.error(error);

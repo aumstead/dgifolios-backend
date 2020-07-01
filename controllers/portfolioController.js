@@ -5,7 +5,6 @@ exports.getPortfolio = async (req, res) => {
   if (!("authorization" in req.headers)) {
     return res.status(401).send("Authorization required")
   }
-  console.log('in portfolio controller')
   try {
     const { userId } = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
     const portfolio = await Portfolio.findOne({ user: userId })

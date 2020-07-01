@@ -24,7 +24,7 @@ exports.forgot = async (req, res, next) => {
     if (user) {
       crypto.randomBytes(32, (err, buffer) => {
         if (err) {
-          console.log(err);
+          console.error(err);
           return res.status(403).send("Error creating token");
         }
         const token = buffer.toString("hex");
@@ -38,7 +38,7 @@ exports.forgot = async (req, res, next) => {
                 to: email,
                 from: "dgifolios@gmail.com",
                 subject: "Reset password",
-                html: `<p>You can change your password using the following link.</p></br>http://localhost:3000/reset/${token}`,
+                html: `<p>You've requested an email to reset your password. You can change your password by using the following link.</p></br>https://dgifolios.com/reset/${token}`,
               },
               () => {
                 // perhaps here send a message to display in UI
@@ -71,7 +71,6 @@ exports.reset = (req, res, next) => {
   User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
     .then((user) => {
       resetUser = user
-      console.log(user)
       return bcrypt.hash(password, 10);
     })
     .then((hash) => {
