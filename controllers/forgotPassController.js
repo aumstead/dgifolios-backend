@@ -68,6 +68,19 @@ exports.reset = (req, res, next) => {
   const { password, token } = req.body;
   let resetUser;
 
+  function validatePassword(inputtxt) {
+    var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}$/;
+    if (inputtxt.match(passw)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  if (!validatePassword(password)) {
+    return res.status(422).send("Password must be between 7-20 characters, contain a number, one uppercase letter, and one lowercase letter.")
+  }
+
   User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
     .then((user) => {
       resetUser = user
@@ -84,6 +97,6 @@ exports.reset = (req, res, next) => {
     })
     .catch((error) => {
       console.error(error);
-      res.status(403).send("Password reset unsuccessful.")
+      res.status(403).send("Password reset unsuccessful. Try requesting another reset email or contact us at admin@dgifolios.com.")
     });
 };

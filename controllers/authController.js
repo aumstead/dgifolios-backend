@@ -20,7 +20,7 @@ exports.signin = async (req, res) => {
     const passwordsMatch = await bcrypt.compare(password, user.password)
     // --If so, generate a token
     if (passwordsMatch) {
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d'})
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET)
       // Send token to client
       res.status(200).json(token)
     } else {
@@ -34,14 +34,24 @@ exports.signin = async (req, res) => {
 
 exports.signup = async (req, res) => {
   const { username, email, password } = req.body;
+
+  function validatePassword(inputtxt) {
+    var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{7,20}$/;
+    if (inputtxt.match(passw)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   try {
     // Validate username, email, password
     if (!isLength(username, { min: 3, max: 20})) {
       return res.status(422).send("Usernames can be between 3-20 characters!")
-    } else if (!isLength(password, { min: 6 })) {
-      return res.status(422).send("Password must be at least 6 characters.")
     } else if (!isEmail(email)) {
       return res.status(422).send("Please enter a valid email address.")
+    } else if (!validatePassword(password)) {
+      return res.status(422).send("Password must be between 7-20 characters, contain a number, one uppercase letter, and one lowercase letter.")
     }
 
     // Check to see if user exists already in db
@@ -65,7 +75,7 @@ exports.signup = async (req, res) => {
     await new Portfolio({ user: newUser._id }).save()
     await new DividendHistory({ user: newUser._id }).save()
     // Create a token for user
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET)
     // Send back token
     res.status(201).json(token)
   } catch (error) {
