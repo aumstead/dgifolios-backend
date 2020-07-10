@@ -15,3 +15,18 @@ exports.getRandomProfiles = async (req, res, next) => {
     res.status(403).send("there was an error")
   }
 }
+
+exports.getAllProfiles = async (req, res, next) => {
+  try {
+    const users = await User.find()
+
+    if (users) {
+      res.status(200).json(users)
+    } else {
+      res.status(403).send("Error getting users.")
+    }
+  } catch (error) {
+    console.error("error getting all profiles", error)
+    res.status(403).send("there was an error")
+  }
+}
